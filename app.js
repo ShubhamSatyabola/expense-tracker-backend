@@ -29,7 +29,6 @@ const app = express();
 //app.use(morgan('combined',{stream:accessLogStream}))
 app.use(cors());
 
-
 const userRoutes = require('./routes/user')
 const expenseRoutes = require('./routes/expense');
 const purchaseRoutes = require('./routes/purchase');
@@ -68,7 +67,7 @@ sequelize.sync()
 .then(result=>{
     app.listen(process.env.PORT || 3000)
     
-    //  console.log(result)
+
 })
 .catch(err=>console.log(err))
 
