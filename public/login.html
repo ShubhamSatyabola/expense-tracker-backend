@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <title>signup/login page</title>
+</head>
+<body>
+    
+    <div class="container">
+        <div >
+            <h1 class="text-center">log-in</h1>
+            <p class="float-right" >New User....<a href="./signup.html" class="float-sm-right"  >signup</a></p>  
+        </div>
+        <br>
+        <hr>
+        <form id="addform" onsubmit="login(event)">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" id="email" name="email" class="form-control" required>
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+            <br>
+        
+            
+            <button type="submit" class="btn btn-primary">login</button>
+            
+            
+        </form><br>
+         <button class="btn btn-primary" id="forgotpassword">Forgot password</button>
+
+        <ul id="list-group"></ul>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script>
+    const forgotpassword = document.getElementById('forgotpassword');
+    forgotpassword.onclick = () =>{
+        window.location.href="./forgotpass.html"
+    }
+    async function login(e){
+        try{e.preventDefault();
+        const email = e.target.email.value
+        const password = e.target.password.value
+        const logInDetails = {email,password};
+        const response = await axios.post('http://16.16.138.182:3000/user/log-in',logInDetails)
+        //console.log(response)
+        if (response.status===201){
+            alert(`${response.data.message}`)
+            localStorage.setItem('token', response.data.token)
+            window.location.href="./index3.html"
+        }
+        }catch(err){
+            //console.log(err.response.data)
+            //document.body.innerHTML += `${err.response.data.error}`
+            alert(`${err.response.data.error}`)
+            
+        }
+
+    }
+    
+    </script>
+</body>
+</html>

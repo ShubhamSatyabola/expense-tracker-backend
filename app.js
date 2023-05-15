@@ -2,9 +2,9 @@ const path = require('path');
 const fs = require('fs')
 
 const express = require('express');
-const helmet = require('helmet')
-const compression = require('compression')
-const morgan = require('morgan')
+//const helmet = require('helmet')
+//const compression = require('compression')
+//const morgan = require('morgan')
 const bodyParser = require('body-parser');
 var cors = require('cors');
 const dotenv = require('dotenv');
@@ -21,12 +21,12 @@ const Downloadreport = require('./models/downloadreport')
 
 const app = express();
  
-const accessLogStream = fs.createWriteStream(path.join(__dirname,'access.log'),
-                        {flags:'a'})
+// const accessLogStream = fs.createWriteStream(path.join(__dirname,'access.log'),
+//                         {flags:'a'})
 
-app.use(helmet())
-app.use(compression())
-app.use(morgan('combined',{stream:accessLogStream}))
+//app.use(helmet())
+//app.use(compression())
+//app.use(morgan('combined',{stream:accessLogStream}))
 app.use(cors());
 
 
@@ -39,13 +39,17 @@ const forgotpassRoutes = require('./routes/forgotpass');
 //db.execute('SELECT * FROM products').then((result)=>console.log(result)).catch(err => console.log(err))
 
 app.use(bodyParser.json({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/user',userRoutes);
 app.use('/password',forgotpassRoutes);
 app.use('/expense',expenseRoutes);
 app.use('/purchase',purchaseRoutes);
 app.use('/premium', premiumRoutes);
+
+app.use((req,res)=>{
+    res.sendFile(path.join(__dirname, `public/${req.url}`))
+})
 
 
 User.hasMany(Expense);

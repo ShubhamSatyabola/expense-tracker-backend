@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <title>signup/login page</title>
+</head>
+<body>
+    
+    <div class="container">
+        <div>
+            <h1 class="text-center">sign-up</h1>
+        
+        </div>
+        <br>
+        <form id="addform" onsubmit="signup(event)">
+            <div>
+                <input type="text" id="name" name="name" class="form-control" required>
+                <label for="name" class="form-label">Username</label>
+            </div>
+            <div>
+                <input type="text" id="email" name="email" class="form-control" required>
+                <label for="email" class="form-label">Email</label>
+            </div>
+            <div>
+                <input type="password" id="password" name="password" class="form-control" required>
+                <label for="password" class="form-label">Password</label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block mb-4">signup</button>
+            
+            <div class="text-center"><p>Already a menber?<a href="./login.html">login</a></p> </div>
+        </form><hr>
+
+        <ul id="list-group"></ul>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script>
+    async function signup(e){
+        try{e.preventDefault();
+        const name = e.target.name.value
+        const email = e.target.email.value
+        const password = e.target.password.value
+        const signUpDetails = {name,email,password};
+        const response = await axios.post('http://16.16.138.182:3000/user/sign-up',signUpDetails)
+        if (response.status===201){
+            alert(`${response.data.newUser}`)
+            window.location.href="./login.html"
+        }
+        
+        }catch(err){
+            //document.body.innerHTML += `${err.response.data.error}`
+            //console.log(err)
+            alert(`${err.response.data.error}`)
+        }
+
+    }
+    
+    </script>
+</body>
+</html>
