@@ -44,9 +44,9 @@ app.use('/user',userRoutes);
 // app.use('/purchase',purchaseRoutes);
 // app.use('/premium', premiumRoutes);
 
-app.use((req,res)=>{
-    res.sendFile(path.join(__dirname, `public/${req.url}`))
-})
+// app.use((req,res)=>{
+//     res.sendFile(path.join(__dirname, `public/${req.url}`))
+// })
 
 
 // User.hasMany(Expense);
