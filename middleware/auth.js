@@ -3,12 +3,15 @@ const User = require('../models/user');
 
 exports.authenticate = async(req,res,next)=>{
     try{const token = req.header("Authorization")
-    //console.log(token)
+    // console.log("token" ,token)
     const id = jwt.verify(token, process.env.token)
-    //console.log(id.userId)
-    const user = await User.findByPk(id.userId)
-    req.user = user
-    next()
+    // console.log(id)
+    const user = await User.findById(id.userId)
+    if(user){
+         req.user = user;
+         next();
+    }
+   
     }
     catch(err){
         console.log(err)

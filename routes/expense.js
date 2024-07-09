@@ -13,7 +13,7 @@ router.post('/post-expense', userAunthenticate.authenticate, expenseController.p
 
 router.delete('/delete-expense/:expenseId', userAunthenticate.authenticate, expenseController.deleteExpense)
 
-router.get('/download-report', userAunthenticate.authenticate, expenseController.downloadReport)
+// router.get('/download-report', userAunthenticate.authenticate, expenseController.downloadReport)
 
 
 module.exports = router;

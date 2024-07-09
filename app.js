@@ -40,7 +40,7 @@ app.use(bodyParser.json({ extended: false }));
 
 app.use('/user',userRoutes);
 // app.use('/password',forgotpassRoutes);
-// app.use('/expense',expenseRoutes);
+app.use('/expense',expenseRoutes);
 // app.use('/purchase',purchaseRoutes);
 // app.use('/premium', premiumRoutes);
 
