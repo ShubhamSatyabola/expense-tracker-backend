@@ -23,7 +23,10 @@ exports.getExpense = async (req, res, next) => {
         // console.log("expenses",expenses);
         res.status(200).json({
           allExpense: expenses,
-          totalExpense
+          totalExpense,
+          totalExpense:req.user.totalExpense,
+          totalIncome:req.user.totalIncome
+
         //   check,
         //   currentPage: page,
         //   hasNextPage: pageSize * page < totalExpense,

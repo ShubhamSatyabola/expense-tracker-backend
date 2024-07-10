@@ -27,7 +27,7 @@ exports.postSignUp = async (req,res) => {
                     password: hash
                 })
                 await newUser.save();
-                res.status(201).json({newUser: "signed up" , token:generateToken(newUser._id)})
+                res.status(201).json({newUser: "signed up" , token:generateToken(newUser._id), isPremiumUser:newUser.isPremiumUser})
         })
         
         
@@ -61,8 +61,13 @@ exports.postLogIn = async (req,res) => {
                     return res.status(500).json({success:false , error: "Something Went Wrong"})
                 }
                 if(result == true){
-                    return res.status(201).json({message: "user logged in sucessfully",
-                    token: generateToken(user[0].id) })
+                    return res
+                      .status(201)
+                      .json({
+                        message: "user logged in sucessfully",
+                        token: generateToken(user[0].id),
+                        isPremiumUser: user[0].isPremiumUser,
+                      });
                 }
                 else{
                     return res.status(401).json({error: "incorrect password" })

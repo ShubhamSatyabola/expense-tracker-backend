@@ -5,11 +5,9 @@ const User = require('../models/user');
 
 exports.getPremium = async(req,res,next)=>{
     try{
-        const leaderboarduser = await User.findAll({
-            attributes:[ 'name','totalexpense'],
-            
-            order:[['totalexpense','DESC']]
-        })
+        const leaderboarduser = await User.find().select("email totalExpense")
+
+        console.log(leaderboarduser);
         res.status(200).json({leaderboarduser})
     
     }
