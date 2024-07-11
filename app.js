@@ -39,7 +39,7 @@ app.use(bodyParser.json({ extended: false }));
 //app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/user',userRoutes);
-// app.use('/password',forgotpassRoutes);
+app.use('/password',forgotpassRoutes);
 app.use('/expense',expenseRoutes);
 app.use('/purchase',purchaseRoutes);
 app.use('/premium', premiumRoutes);

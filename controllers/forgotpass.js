@@ -3,20 +3,21 @@ const sendinblue = require('sib-api-v3-sdk');
 const bcrypt = require('bcrypt')
 
 const User =  require('../models/user');
-const ForgotPass = require('../models/forgotpass');
+const ForgotPassword = require('../models/forgotpass');
 
 
 exports.forgotPassword = async(req,res,next)=>{
     try{
         const email = req.body.email;
         //console.log(email)
-        const user = await User.findOne({where:{email}});
+        const user = await User.findOne({email});
         if(!user){
             throw new Error('User Not Exist')
         }
         else{
         const id = uuid.v4()
-        const resetpassword = await user.createForgotPass({id:id,isactive:true})
+        const resetpassword = new ForgotPassword({id:id,isActive:true,userId:user._id})
+        await resetpassword.save()
         const client =sendinblue.ApiClient.instance
 
         const apiKey = client.authentications['api-key']
@@ -24,7 +25,7 @@ exports.forgotPassword = async(req,res,next)=>{
         const tranEmailApi = new sendinblue.TransactionalEmailsApi()
 
         const sender = {
-            email: 'satyabolashubham@gmail.com'
+            email: 'bhaskarsatyabola.bs11@gmail.com'
         }
         const receivers = [
             {
@@ -38,7 +39,7 @@ exports.forgotPassword = async(req,res,next)=>{
             to: receivers,
             subject: 'reset password',
             textContent: 'reset your password here',
-            htmlContent:`<a href="http://localhost:3000/password/reset-password/${id}">Reset Password</a>`
+            htmlContent:`<a href="http://localhost:8000/password/reset-password/${id}">Reset Password</a>`
         })
         //console.log(reset)
         //console.log(response)
@@ -55,9 +56,11 @@ exports.forgotPassword = async(req,res,next)=>{
 }
 exports.resetPassword = async (req,res,next)=>{
     try{const id = req.params.uuid;
-    const resetpassword = await ForgotPass.findOne({ where : { id }})
-        if(resetpassword){
-            await resetpassword.update({isactive: false});
+    const resetpassword = await ForgotPassword.findOne({ id })
+    // console.log(resetpassword);
+        if(resetpassword.isActive == true){
+            resetpassword.isActive= false;
+            await resetpassword.save()
             res.status(200).send(`<html>
                                     <script>
                                         function formsubmitted(e){
@@ -86,8 +89,8 @@ exports.updatePassword = async(req,res,next)=>{
     try{
         const newpassword = req.query.newpassword;
         const id = req.params.uuid;
-        const updatepassword = await ForgotPass.findOne({ where : { id: id }})
-        const user = await User.findOne({where: { id : updatepassword.userId}})
+        const updatepassword = await ForgotPassword.findOne({ id: id })
+        const user = await User.findOne({ _id : updatepassword.userId})
                 // console.log('userDetails', user)
             if(user) {
                     //encrypt the password
@@ -97,7 +100,9 @@ exports.updatePassword = async(req,res,next)=>{
                                 console.log(err);
                                 throw new Error(err);
                             }
-                            await user.update({ password: hash })
+                            user.password = hash
+                            await user.save()
+                            // await user.update({ password: hash })
                             res.status(201).json({message: 'Successfuly update the new password'})
                             })
                         }
